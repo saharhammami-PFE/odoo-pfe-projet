@@ -2,7 +2,7 @@
     'name': 'PFE Automation',
     'version': '16.0.1.0',
     'category': 'Technical',
-    'summary': 'Automated Odoo Deployment for PFE Project',
+    'summary': 'TEST 6 Automated Odoo Deployment for PFE Project',
     'description': 'This module handles the automation and CI/CD testing for the PFE project.',
     'website': 'https://github.com/saharhammami-PFE/odoo-pfe-projet',
     'author': 'Sahar Hammami',

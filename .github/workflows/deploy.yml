@@ -8,7 +8,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
       - name: Send Files to VM
         uses: appleboy/scp-action@v0.1.4
@@ -20,7 +21,7 @@ jobs:
           source: "custom_addons/*"
           target: "/tmp/deploy"
 
-      - name: Move and Restart Odoo
+      - name: Move, Update DB, and Restart Odoo
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.VM_IP }}
@@ -28,6 +29,16 @@ jobs:
           password: ${{ secrets.VM_PASSWORD }}
           port: 22
           script: |
+            # 1. Ensure target directory exists and move files
             sudo cp -r /tmp/deploy/custom_addons/* /opt/odoo/custom_addons/
             sudo chown -R odoo:odoo /opt/odoo/custom_addons
+            
+            # 2. Automatically Update/Install the module in the database
+            # This ensures your changes are reflected without clicking "Upgrade" in the UI
+            sudo -u odoo odoo -c /etc/odoo/odoo.conf -d pfe-sahar -u pfe_module --stop-after-init
+            
+            # 3. Restart Odoo service
             sudo systemctl restart odoo
+            
+            # 4. Cleanup temp files
+            rm -rf /tmp/deploy/custom_addons/*

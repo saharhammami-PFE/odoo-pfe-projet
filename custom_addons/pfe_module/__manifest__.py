@@ -1,11 +1,15 @@
 {
     'name': 'PFE Automation',
-    'version': '1.0',
-    'author': 'PFE Student',
+    'version': '16.0.1.0',
     'category': 'Technical',
+    'summary': 'Automated Odoo Deployment for PFE Project',
+    'description': 'This module handles the automation and CI/CD testing for the PFE project.',
+    'website': 'https://github.com/saharhammami-PFE/odoo-pfe-projet',
+    'author': 'Sahar Hammami',
+    'license': 'LGPL-3',
     'depends': ['base'],
     'data': [],
     'installable': True,
-    'application': True, # This makes it show up in the main Apps list
+    'application': True,
     'auto_install': False,
 }

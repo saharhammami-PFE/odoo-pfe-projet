@@ -1,0 +1,33 @@
+name: Odoo Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Send Files to VM
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VM_IP }}
+          username: "azureuser"
+          password: ${{ secrets.VM_PASSWORD }}
+          port: 22
+          source: "custom_addons/*"
+          target: "/tmp/deploy"
+
+      - name: Move and Restart Odoo
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VM_IP }}
+          username: "azureuser"
+          password: ${{ secrets.VM_PASSWORD }}
+          port: 22
+          script: |
+            sudo cp -r /tmp/deploy/custom_addons/* /opt/odoo/custom_addons/
+            sudo chown -R odoo:odoo /opt/odoo/custom_addons
+            sudo systemctl restart odoo
